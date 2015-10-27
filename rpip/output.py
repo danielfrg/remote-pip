@@ -13,12 +13,12 @@ class Output(dict):
             self[host]['exit_code'] = values['exit_code']
             stdout = ''
             for line in values['stdout']:
-                stdout += line + '\n'
+                stdout += line.decode('utf-8') + '\n'
             self[host]['stdout'] = stdout.strip()
 
             stderr = ''
             for line in values['stderr']:
-                stderr += line + '\n'
+                stderr += line.decode('utf-8') + '\n'
             self[host]['stderr'] = stderr.strip()
         return self
 
