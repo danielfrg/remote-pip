@@ -24,12 +24,8 @@ class Output(dict):
 
     def groupby(self):
         groups = []
-        for key, grouped in itertools.groupby(self, key=lambda node: self[node]):
-            groups.append((list(grouped), key))
-        return groups
-
-    def groupby_exit_code(self):
-        groups = []
-        for key, grouped in itertools.groupby(self, key=lambda node: self[node]['exit_code']):
-            groups.append((list(grouped), key))
+        items = sorted(self.items(), key=lambda x: x[1], reverse=True)
+        for key, grouped in itertools.groupby(items, key=lambda x: x[1]):
+            groups.append((list(item[0] for item in grouped), key))
+        groups = sorted(groups, key=lambda x: len(x[0]), reverse=True)
         return groups
