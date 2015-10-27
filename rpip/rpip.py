@@ -1,21 +1,27 @@
+from __future__ import absolute_import, unicode_literals
+
 from pssh import ParallelSSHClient
+
+from .output import Output
 
 
 class RemotePip(ParallelSSHClient):
 
     def __init__(self, hosts, pip_path='/usr/bin/pip', *args, **kwargs):
         self.pip_path = pip_path
+        self.output = None
         super(RemotePip, self).__init__(hosts, *args, **kwargs)
 
     def install(self, pkgs, upgrade=False):
         cmd = self.generate_install_cmd(pkgs=pkgs, upgrade=upgrade)
         output = self.run_command(cmd)
-        return Output.from_pssh_dict(output)
+        self.output = Output.from_pssh_dict(output)
+        return self.output
 
     def generate_install_cmd(self, pkgs, upgrade=False):
         cmd = '{} install '.format(self.pip_path)
 
-        if isinstance(pkgs, str):
+        if isinstance(pkgs, unicode):
             pkgs = [pkgs]
         cmd += ' '.join(pkgs)
 
@@ -23,28 +29,6 @@ class RemotePip(ParallelSSHClient):
             cmd += ' -U'
         return cmd
 
-
-class Output(dict):
-
-    @classmethod
-    def from_pssh_dict(cls, output):
-        self = cls()
-        for host, values in output.iteritems():
-            self[host] = {}
-            self[host]['exit_code'] = values['exit_code']
-            stdout = ''
-            for line in values['stdout']:
-                stdout += line + '\n'
-            self[host]['stdout'] = stdout.strip()
-
-            stderr = ''
-            for line in values['stderr']:
-                stderr += line + '\n'
-            self[host]['stderr'] = stderr.strip()
-        return self
-
-    def __init__(self):
-        pass
 
 if __name__ == '__main__':
     hosts = ['54.210.23.215', '52.91.174.90', '54.172.180.200', '52.91.58.145']
