@@ -1,5 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
+# Fix error message: Exception KeyError ... in <module 'threading' ...
+import sys
+if 'threading' in sys.modules:
+    del sys.modules['threading']
+import gevent
+import gevent.socket
+import gevent.monkey
+gevent.monkey.patch_all()
+# END
+
 from pssh import ParallelSSHClient
 
 from .output import Output
