@@ -39,12 +39,18 @@ class RemotePip(ParallelSSHClient):
             cmd += ' -U'
         return cmd
 
+    def uninstall(self, pkgs):
+        cmd = self.generate_uninstall_cmd(pkgs=pkgs)
+        output = self.run_command(cmd)
+        self.output = Output.from_pssh_dict(output)
+        return self.output
 
-if __name__ == '__main__':
-    hosts = ['54.210.23.215', '52.91.174.90', '54.172.180.200', '52.91.58.145']
-    import paramiko
-    key = paramiko.RSAKey.from_private_key_file('/Users/drodriguez/.ssh/drodriguez.pem')
+    def generate_uninstall_cmd(self, pkgs):
+        cmd = '{} uninstall '.format(self.pip_path)
 
-    rpip = RemotePip(hosts, user='ubuntu', pkey=key, pip_path='/opt/anaconda/bin/pip')
-    print rpip.generate_install_cmd(pkgs='requests')
-    print rpip.install(pkgs='requests')
+        if isinstance(pkgs, unicode):
+            pkgs = [pkgs]
+        cmd += ' '.join(pkgs)
+
+        cmd += ' -y'
+        return cmd
