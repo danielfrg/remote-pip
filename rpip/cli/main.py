@@ -40,7 +40,7 @@ def cli(ctx):
     ctx.obj = {}
 
 
-@cli.command(short_help='Install pip packages in remote nodes')
+@cli.command(short_help='Install packages in remote nodes')
 @click.argument('packages', nargs=-1)
 @default_options
 @click.pass_context
@@ -60,7 +60,7 @@ def install(ctx, packages):
             click.echo(output['stderr'], err=True)
 
 
-@cli.command(short_help='Uninstall pip packages in remote nodes')
+@cli.command(short_help='Uninstall packages in remote nodes')
 @click.argument('packages', nargs=-1)
 @default_options
 @click.pass_context
