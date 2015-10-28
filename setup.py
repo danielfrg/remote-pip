@@ -12,7 +12,7 @@ To upload a new version:
 with open('requirements.txt') as f:
     required = f.read().splitlines()
 
-setup(name='remote-pip',
+setup(name='rpip',
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
       description='Remote pip',
