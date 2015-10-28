@@ -1,4 +1,5 @@
 click>=4.1
+parallel-ssh>=0.80.3
 
 pytest>=2.7.2
 pytest-cov
