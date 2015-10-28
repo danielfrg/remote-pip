@@ -54,3 +54,37 @@ class RemotePip(ParallelSSHClient):
 
         cmd += ' -y'
         return cmd
+
+    def freeze(self):
+        cmd = self.generate_freeze_cmd()
+        output = self.run_command(cmd)
+        self.output = Output.from_pssh_dict(output)
+        return self.output
+
+    def generate_freeze_cmd(self):
+        cmd = '{} freeze'.format(self.pip_path)
+        return cmd
+
+    def list(self):
+        cmd = self.generate_list_cmd()
+        output = self.run_command(cmd)
+        self.output = Output.from_pssh_dict(output)
+        return self.output
+
+    def generate_list_cmd(self):
+        cmd = '{} list'.format(self.pip_path)
+        return cmd
+
+    def show(self, pkgs):
+        cmd = self.generate_show_cmd(pkgs=pkgs)
+        output = self.run_command(cmd)
+        self.output = Output.from_pssh_dict(output)
+        return self.output
+
+    def generate_show_cmd(self, pkgs):
+        cmd = '{} show '.format(self.pip_path)
+
+        if isinstance(pkgs, unicode):
+            pkgs = [pkgs]
+        cmd += ' '.join(pkgs)
+        return cmd

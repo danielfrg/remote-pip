@@ -40,7 +40,7 @@ def cli(ctx):
     ctx.obj = {}
 
 
-@cli.command(short_help='Install packages in remote nodes')
+@cli.command(short_help='Install packages')
 @click.argument('packages', nargs=-1)
 @default_options
 @click.pass_context
@@ -60,7 +60,7 @@ def install(ctx, packages):
             click.echo(output['stderr'], err=True)
 
 
-@cli.command(short_help='Uninstall packages in remote nodes')
+@cli.command(short_help='Uninstall packages')
 @click.argument('packages', nargs=-1)
 @default_options
 @click.pass_context
@@ -79,6 +79,63 @@ def uninstall(ctx, packages):
         if output['stderr'] != '':
             click.echo(output['stderr'], err=True)
 
+
+@cli.command(short_help='Output installed packages in requirements format')
+@default_options
+@click.pass_context
+def freeze(ctx):
+    client = ctx.obj['client']
+    output = client.freeze()
+
+    groups = output.groupby()
+    for group in groups:
+        nodes = group[0]
+        output = group[1]
+        click.echo('Response from (x{}) nodes:'.format(len(nodes)))
+        if output['stdout'] != '':
+            err = output['exit_code'] != 0
+            click.echo(output['stdout'], err=err)
+        if output['stderr'] != '':
+            click.echo(output['stderr'], err=True)
+
+
+@cli.command(short_help='List installed packages')
+@default_options
+@click.pass_context
+def list(ctx):
+    client = ctx.obj['client']
+    output = client.list()
+
+    groups = output.groupby()
+    for group in groups:
+        nodes = group[0]
+        output = group[1]
+        click.echo('Response from (x{}) nodes:'.format(len(nodes)))
+        if output['stdout'] != '':
+            err = output['exit_code'] != 0
+            click.echo(output['stdout'], err=err)
+        if output['stderr'] != '':
+            click.echo(output['stderr'], err=True)
+
+
+@cli.command(short_help='Show information about installed packages')
+@click.argument('packages', nargs=-1)
+@default_options
+@click.pass_context
+def show(ctx, packages):
+    client = ctx.obj['client']
+    output = client.show(pkgs=packages)
+
+    groups = output.groupby()
+    for group in groups:
+        nodes = group[0]
+        output = group[1]
+        click.echo('Response from (x{}) nodes:'.format(len(nodes)))
+        if output['stdout'] != '':
+            err = output['exit_code'] != 0
+            click.echo(output['stdout'], err=err)
+        if output['stderr'] != '':
+            click.echo(output['stderr'], err=True)
 
 if __name__ == '__main__':
     start()
