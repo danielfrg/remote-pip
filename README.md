@@ -8,10 +8,11 @@ Install python packages using pip in remote hosts.
 
 ## Usage
 
-`rpip` is a basic CLI that has only two `install` and `uninstall` commands that
-follow the same API as `pip` with some extra options:
+`rpip` is a basic CLI that has the basic `pip` commands: `install`, `uninstall`,
+`freeze`, `list` and `show`
+and follows the same API as `pip` with some extra options:
 
--  Hosts (`--hosts/-h`) is the only required option. It can be IPs for example
+- Hosts (`--hosts/-h`) is the only required option. It can be IPs for example
 but can also be defined in you ssh config file (`~/.ssh/config`)
 for easier reference without passing the other options
 - User (`--user/-u`) is the username to ssh into the hosts
