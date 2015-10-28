@@ -1,2 +1,4 @@
+include LICENSE.txt
+include requirements.txt
 include versioneer.py
 include rpip/_version.py
