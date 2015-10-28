@@ -5,6 +5,7 @@ from functools import update_wrapper
 import click
 import paramiko
 
+import rpip
 from rpip import RemotePip
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -33,6 +34,7 @@ def start():
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
+@click.version_option(prog_name='Remote pip', version=rpip.__version__)
 @click.pass_context
 def cli(ctx):
     ctx.obj = {}
