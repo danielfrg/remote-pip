@@ -1,5 +1,15 @@
-click>=4.1
+click>=5.0
 parallel-ssh>=0.80.3
+paramiko
+gevent
 
+# Test
 pytest>=2.7.2
 pytest-cov
+
+# Utils
+ipython
+jupyter
+pylint
+yapf
+versioneer
